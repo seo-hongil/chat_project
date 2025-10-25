@@ -3,6 +3,8 @@ package com.project.chatproject.domain.entity;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
+import java.util.UUID;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,4 +17,11 @@ public class ChatRoom {
     private Long createDate; // 생성일
     private int userCount; // 채팅방 인원수
     private int maxUserCnt; // 채팅방 최대 인원 제한
+
+    public ChatRoom create(String roomName){
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.roomId = UUID.randomUUID().toString();
+        chatRoom.roomName = roomName;
+        return chatRoom;
+    }
 }
