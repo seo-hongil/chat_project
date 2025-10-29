@@ -1,27 +1,50 @@
 package com.project.chatproject.domain.entity;
 
 import lombok.*;
-import org.antlr.v4.runtime.misc.NotNull;
-
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @ToString
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatRoom {
-    private String roomId; // 채팅방 번호
-    private String roomName; // 채팅방 이름
-    private String creator; // 채팅방 생성자
-    private Long createDate; // 생성일
-    private int userCount; // 채팅방 인원수
-    private int maxUserCnt; // 채팅방 최대 인원 제한
 
-    public ChatRoom create(String roomName){
-        ChatRoom chatRoom = new ChatRoom();
-        chatRoom.roomId = UUID.randomUUID().toString();
-        chatRoom.roomName = roomName;
-        return chatRoom;
+    @Builder.Default
+    private final String roomId = UUID.randomUUID().toString(); // 채팅방 번호
+
+    @NonNull
+    private final String roomName; // 채팅방 이름
+
+    @Builder.Default
+    private final Long createDate = System.currentTimeMillis(); // 생성일
+
+    @Builder.Default
+    private int userCount = 0; // 채팅방 인원수
+
+    @Builder.Default
+    private final Map<String, String> userlist = new HashMap<>(); // 사용자 목록
+
+    // ===== 안전한 인원수 조작 메서드 =====
+    public ChatRoom plusUserCnt() {
+        this.userCount += 1;
+        return this;
     }
+
+    public ChatRoom minusUserCnt() {
+        if (userCount > 0) {
+            this.userCount -= 1;
+        }
+        return this;
+    }
+
+    // ===== 채팅방 생성 헬퍼 =====
+    public static ChatRoom create(String roomName) {
+        return ChatRoom.builder()
+                .roomName(Objects.requireNonNull(roomName, "roomName은 필수입니다."))
+                .build();
+    }
+
 }
