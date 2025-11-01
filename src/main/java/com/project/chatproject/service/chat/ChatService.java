@@ -1,6 +1,5 @@
-package com.project.chatproject.service;
+package com.project.chatproject.service.chat;
 
-import com.project.chatproject.domain.dto.ChatRoomDto;
 import com.project.chatproject.domain.entity.ChatRoom;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

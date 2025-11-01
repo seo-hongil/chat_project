@@ -1,5 +1,3 @@
-'user script';
-
 document.write("<script\n" +
     "  src=\"https://code.jquery.com/jquery-3.6.1.min.js\"\n" +
     "  integrity=\"sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=\"\n" +
@@ -72,8 +70,6 @@ function isDuplicateName() {
             "roomId": roomId
         },
         success: function (data) {
-            console.log("함수 동작 확인 : " + data);
-
             username = data;
         }
     })
@@ -92,7 +88,6 @@ function getUserList(){
         success : function(data){
             var users = "";
             for(let i=0; i<data.length; i++){
-                console.log("data[i] : "+data[i]);
                 users += "<li class='dropdown-item'>" + data[i] + "</li>"
             }
             $list.html(users);
@@ -105,13 +100,13 @@ function onError(error) {
     connectingElement.style.color = 'red';
 }
 
-// 메시지 전송때는 JSON 형식을 메시지를 전달한다.
+// 메시지 전송때는 JSON로 메시지를 전송
 function sendMessage(event) {
     var messageContent = messageInput.value.trim();
 
     if(messageContent && stompClient) {
         var chatMessage = {
-            "roomId": roomId,
+            roomId: roomId,
             sender : username,
             message: messageInput.value,
             type: 'TALK'
@@ -123,8 +118,7 @@ function sendMessage(event) {
     event.preventDefault();
 }
 
-// 메시지를 받을 때도 마찬가지로 JSON 타입으로 받으며,
-// 넘어온 JSON 형식의 메시지를 parse 해서 사용한다.
+// 메시지를 받을 때 JSON 타입으로 받고 parse해서 사용
 function onMessageReceived(payload) {
     var chat = JSON.parse(payload.body);
 
@@ -177,5 +171,5 @@ function getAvatarColor(messageSender) {
     return colors[index];
 }
 
-usernameForm.addEventListener('submit', connect, true)
-messageForm.addEventListener('submit', sendMessage, true)
+usernameForm.addEventListener('submit', connect, true);
+messageForm.addEventListener('submit', sendMessage, true);

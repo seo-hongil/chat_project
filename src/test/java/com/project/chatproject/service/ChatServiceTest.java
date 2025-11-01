@@ -1,6 +1,7 @@
 package com.project.chatproject.service;
 
 import com.project.chatproject.domain.entity.ChatRoom;
+import com.project.chatproject.service.chat.ChatService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

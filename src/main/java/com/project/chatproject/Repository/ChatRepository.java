@@ -15,8 +15,17 @@ public class ChatRepository {
     private Map<String, ChatRoom> chatRoomMap = new LinkedHashMap<>();
 
     // 채팅방 생성
-    public ChatRoom createChatRoom(String roomName){
-        ChatRoom chatRoom = ChatRoom.create(roomName);
+    public ChatRoom createChatRoom(String roomName, String roomPwd, boolean secretChk, int maxUserCnt){
+        ChatRoom chatRoom = ChatRoom.builder()
+                .roomId(UUID.randomUUID().toString())
+                .roomName(roomName)
+                .roomPwd(roomPwd)
+                .secretChk(secretChk)
+                .userCount(0)
+                .maxUserCnt(maxUserCnt)
+                .userlist(new HashMap<String, String>())
+                .build();
+
         chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
 
         return chatRoom;
@@ -75,7 +84,7 @@ public class ChatRepository {
         ChatRoom room = chatRoomMap.get(roomId);
 
         // hashmap 을 for 문을 돌린 후
-        // value 값만 뽑아내서 list 에 저장 후 reutrn
+        // value 값만 뽑아내서 list에 저장 후 reutrn
         room.getUserlist().forEach((key, value) -> list.add(value));
         return list;
     }
@@ -93,5 +102,35 @@ public class ChatRepository {
         }
 
         return tmp;
+    }
+
+    // 채팅방 비밀번호 조회
+    public boolean confirmPwd(String roomId, String roomPwd) {
+        return roomPwd.equals(chatRoomMap.get(roomId).getRoomPwd());
+    }
+
+    // 채팅방 삭제
+    public void delChatRoom(String roomId) {
+        try {
+            // 채팅방 삭제
+            chatRoomMap.remove(roomId);
+            log.info("삭제 완료 roomId : {}", roomId);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // maxUserCnt 에 따른 채팅방 입장 여부
+    public boolean chkRoomUserCnt(String roomId){
+        ChatRoom room = chatRoomMap.get(roomId);
+
+        log.info("참여인원 확인 [{}, {}]", room.getUserCount(), room.getMaxUserCnt());
+
+        if (room.getUserCount() + 1 > room.getMaxUserCnt()) {
+            return false;
+        }
+
+        return true;
     }
 }

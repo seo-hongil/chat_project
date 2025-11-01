@@ -1,10 +1,8 @@
-package com.project.chatproject.domain.dto;
+package com.project.chatproject.domain.dto.chat;
 
 import com.project.chatproject.domain.entity.ChatRoom;
 import lombok.*;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 // Stomp 를 통해 pub/sub를 사용하면 구독자 관리가 알아서 된다.

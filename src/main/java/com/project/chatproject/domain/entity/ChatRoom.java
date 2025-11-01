@@ -18,16 +18,21 @@ public class ChatRoom {
     @NonNull
     private final String roomName; // 채팅방 이름
 
-    @Builder.Default
-    private final Long createDate = System.currentTimeMillis(); // 생성일
+    private String roomPwd; // 채팅방 삭제시 필요한 pwd
+
+    private boolean secretChk; // 채팅방 잠금 여부
 
     @Builder.Default
     private int userCount = 0; // 채팅방 인원수
 
+    private int maxUserCnt; // 채팅방 최대 인원 제한
+
+    @Builder.Default
+    private final Long createDate = System.currentTimeMillis(); // 생성일
+
     @Builder.Default
     private final Map<String, String> userlist = new HashMap<>(); // 사용자 목록
 
-    // ===== 안전한 인원수 조작 메서드 =====
     public ChatRoom plusUserCnt() {
         this.userCount += 1;
         return this;
@@ -39,12 +44,4 @@ public class ChatRoom {
         }
         return this;
     }
-
-    // ===== 채팅방 생성 헬퍼 =====
-    public static ChatRoom create(String roomName) {
-        return ChatRoom.builder()
-                .roomName(Objects.requireNonNull(roomName, "roomName은 필수입니다."))
-                .build();
-    }
-
 }
