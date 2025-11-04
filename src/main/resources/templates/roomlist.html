@@ -145,6 +145,33 @@
       location.href = "/chat/delRoom/"+roomId;
     }
 
+    function changeInfo(){
+      let chPwd = $("#chPwd").val();
+      let chRoomName = $("#chRoomName").val();
+      let chRoomUserCnt = $("#chRoomUserCnt").val();
+      let chSecret = $("#chSecret").prop("checked");
+      $("#chSecretChk").val(chSecret ? "true" : "false");
+
+      $.ajax({
+        type : "POST",
+        url : "/chat/changeChat",
+        data : {
+          "roomId" : roomId,
+          "roomName" : chRoomName,
+          "roomPwd" : chPwd,
+          "userCount": chRoomUserCnt,
+          "roomRock" : $("#chSecretChk").val()
+        },
+        success : function(result){
+          if (!result) {
+            alert("채팅방 설정에 실패했습니다.");
+
+          }else{
+              location.reload();
+          }
+        }
+      })
+    }
     // 채팅방 입장 시 인원 수에 따라서 입장 여부 결정
     function chkRoomUserCnt(roomId){
       let chk;
@@ -398,7 +425,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="">변경</button>
+          <button type="button" class="btn btn-secondary" onclick="changeInfo()">변경</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
         </div>
       </div>
