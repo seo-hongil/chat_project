@@ -49,7 +49,12 @@ public class ChatRoomController {
 
     // 채팅방 입장 화면
     @GetMapping("/chat/room")
-    public String roomDetail(Model model, String roomId){
+    public String roomDetail(Model model, String roomId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        if(principalDetails != null){
+            model.addAttribute("username", principalDetails.getUserRealName());
+            log.info("user {}", principalDetails);
+        }
+
         log.info("roomId = {}", roomId);
         model.addAttribute("room",chatRepository.findRoomById(roomId));
         return "chatroom";

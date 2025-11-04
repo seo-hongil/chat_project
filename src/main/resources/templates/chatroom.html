@@ -17,14 +17,17 @@
   <h2> 다시 페이지 로딩을 해주세요. </h2>
 </noscript>
 <div id="username-page">
-  <div th:if="${username == null}" class="username-page-container">
-    <h1 class="title">채팅방에서 사용할 이름을 입력하세요</h1>
+  <div class="username-page-container">
+    <h1 class="title">아이디 생성</h1>
     <form id="usernameForm" name="usernameForm">
-      <div class="form-group">
-        <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control"/>
+      <div th:if="${username == null}" class="form-group">
+        <input type="text" id="name" placeholder="채팅방에서 사용할 이름을 입력하세요" autocomplete="off" class="form-control"/>
+      </div>
+      <div  th:if="${username != null}" class="form-group">
+        <input type="text" id="name" placeholder="채팅방에서 사용할 이름을 입력하세요" autocomplete="off" class="form-control" th:value="${username}"/>
       </div>
       <div class="form-group">
-        <button type="submit" class="accent username-submit">Start Chatting</button>
+        <button type="submit" class="accent username-submit">채팅 시작하기</button>
       </div>
     </form>
   </div>
