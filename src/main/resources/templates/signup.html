@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원가입</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .signup-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 4px rgba(0, 123, 255, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form");
+            const usernameInput = document.getElementById("username");
+            const emailInput = document.getElementById("email");
+            const passwordInput = document.getElementById("password");
+            const confirmInput = document.getElementById("confirm");
+
+            form.addEventListener("submit", function(event) {
+                // 이름 검증: 빈칸 X, 영어만 허용 X (한글만)
+                const name = usernameInput.value.trim();
+                const nameRegex = /^[가-힣]+$/; // 한글만
+                if (!name) {
+                    alert("이름을 입력해주세요.");
+                    usernameInput.focus();
+                    event.preventDefault();
+                    return;
+                }
+                if (!nameRegex.test(name)) {
+                    alert("이름은 한글만 입력 가능합니다.");
+                    usernameInput.focus();
+                    event.preventDefault();
+                    return;
+                }
+
+                // 이메일 검증: 기본 이메일 패턴
+                const email = emailInput.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!email) {
+                    alert("이메일을 입력해주세요.");
+                    emailInput.focus();
+                    event.preventDefault();
+                    return;
+                }
+                if (!emailRegex.test(email)) {
+                    alert("유효한 이메일 주소를 입력해주세요.");
+                    emailInput.focus();
+                    event.preventDefault();
+                    return;
+                }
+
+                // 비밀번호 검증: 영문, 특수문자 포함 8자 이상
+                const password = passwordInput.value;
+                const passwordRegex = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?]).{8,}$/;
+
+                if (!password) {
+                    alert("비밀번호를 입력해주세요.");
+                    passwordInput.focus();
+                    event.preventDefault();
+                    return;
+                }
+
+                if (!passwordRegex.test(password)) {
+                    alert("비밀번호는 8자 이상이어야 하며, 영문자, 숫자, 특수문자를 포함해야 합니다.");
+                    passwordInput.focus();
+                    event.preventDefault();
+                    return;
+                }
+
+                // 비밀번호 확인 검증
+                const confirm = confirmInput.value;
+                if (password !== confirm) {
+                    alert("비밀번호 확인이 일치하지 않습니다.");
+                    confirmInput.focus();
+                    event.preventDefault();
+                    return;
+                }
+
+                // 모두 통과하면 form 제출
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="signup-container">
+    <h2>회원가입</h2>
+    <form action="/signup" method="POST">
+        <label for="name">이름</label>
+        <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required />
+
+        <label for="email">이메일</label>
+        <input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required />
+
+        <label for="pwd">비밀번호</label>
+        <input type="password" id="pwd" name="pwd" placeholder="비밀번호를 입력하세요" required />
+
+        <label for="pwdConfirm">비밀번호 확인</label>
+        <input type="password" id="pwdConfirm" name="pwdConfirm" placeholder="비밀번호를 다시 입력하세요" required />
+
+        <button type="submit">회원가입</button>
+    </form>
+
+    <div class="login-link">
+        이미 계정이 있으신가요? <a href="/login">로그인</a>
+    </div>
+</div>
+</body>
+</html>

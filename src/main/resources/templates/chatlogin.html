@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/css/login.css"/>
+  <title>Login</title>
+</head>
+<body>
+<div class="container-login100">
+  <div class="wrap-login100">
+    <form class="login100-form validate-form" action="/login" method="POST">
+      <span class="login100-form-logo">
+        <i class="zmdi zmdi-landscape"></i>
+      </span>
+
+      <span class="login100-form-title">
+        로그인
+      </span>
+
+      <div class="wrap-input100">
+        <input class="input100" type="email" name="username" placeholder="이메일" required>
+      </div>
+
+      <div class="wrap-input100">
+        <input class="input100" type="password" name="password" placeholder="비밀번호" required>
+      </div>
+
+      <div class="contact100-form-checkbox">
+        <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+        <label class="label-checkbox100" for="ckb1">
+          이메일 기억하기
+        </label>
+      </div>
+
+      <div class="container-login100-form-btn">
+        <button class="login100-form-btn" type="submit">
+          로그인
+        </button>
+      </div>
+
+      <!-- 회원가입 버튼 -->
+      <div class="container-login100-form-btn">
+        <button type="button" class="signup-btn" onclick="location.href='/signup'">
+          회원가입
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

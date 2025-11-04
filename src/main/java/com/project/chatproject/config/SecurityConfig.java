@@ -3,39 +3,41 @@ package com.project.chatproject.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        // "/" 이하 모든 경로 허용 (임시 설정)
+                        .requestMatchers("/**").permitAll()
+                )
+                .formLogin(form -> form
+                        // 기본 로그인 페이지 대신 커스텀 페이지 사용
+                        .loginPage("/chatlogin")
+                        .loginProcessingUrl("/login") // 로그인 처리 URL
+                        .defaultSuccessUrl("/")       // 로그인 성공 후 이동 URL
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")       // 로그아웃 요청 URL
+                        .logoutSuccessUrl("/")      // 로그아웃 성공 후 이동 URL
+                        .permitAll()
+                );
+
+        return http.build();
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(org.springframework.security.core.userdetails.User
-                .withUsername("user")
-                .password(passwordEncoder().encode("1234"))
-                .roles("USER")
-                .build());
-        return manager;
-    }
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())  // 테스트용으로 CSRF 비활성화
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // 모든 요청 허용
-                );
-
-        return http.build();
     }
 }

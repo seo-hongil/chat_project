@@ -221,6 +221,15 @@
 <body>
   <div class="container">
     <h2>채팅방 리스트</h2>
+    <div th:if="${username == null}" class="row">
+      <div class="col">
+        <a href="/chatlogin"><button type="button" class="btn btn-primary">로그인</button></a>
+        <a href="/signup"><button type="button" class="btn btn-primary">회원가입</button></a>
+      </div>
+    </div>
+    <h5 th:if="${username != null}">
+      [[${userName}]]
+    </h5>
     <table class="table table-hover" id="table">
       <thead>
       <tr>

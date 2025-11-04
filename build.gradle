@@ -34,6 +34,7 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     implementation 'org.webjars:sockjs-client:1.5.1'  // sockjs
     implementation 'org.webjars:stomp-websocket:2.3.4' // stomp
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     compileOnly 'org.projectlombok:lombok'
 

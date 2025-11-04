@@ -2,8 +2,10 @@ package com.project.chatproject.controller.chat;
 
 import com.project.chatproject.Repository.ChatRepository;
 import com.project.chatproject.domain.entity.ChatRoom;
+import com.project.chatproject.service.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +20,15 @@ public class ChatRoomController {
 
     // 채팅 리스트 화면
     @GetMapping("/")
-    public String goChatRoom(Model model){
+    public String goChatRoom(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
         model.addAttribute("list", chatRepository.findAllRoom());
         log.info("SHOW ALL ChatList {}", chatRepository.findAllRoom());
         log.info("roomName={}", model.getAttribute("roomName"));
+
+        if(principalDetails != null){
+            model.addAttribute("username", principalDetails.getUserRealName());
+            log.info("user {}", principalDetails);
+        }
         return "roomlist";
     }
 
