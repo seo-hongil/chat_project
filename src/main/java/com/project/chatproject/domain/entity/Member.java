@@ -1,6 +1,5 @@
 package com.project.chatproject.domain.entity;
 
-import com.project.chatproject.domain.dto.user.SignDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,11 +26,4 @@ public class Member {
     @Column(nullable = false)
     private String role = "ROLE_USER";
 
-    public static Member from(SignDto signDto, String encodedPwd){
-        return Member.builder()
-                .name(signDto.getName())
-                .email(signDto.getEmail())
-                .pwd(encodedPwd)
-                .build();
-    }
 }

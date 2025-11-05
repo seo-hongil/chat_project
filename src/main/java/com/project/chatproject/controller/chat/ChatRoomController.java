@@ -1,7 +1,8 @@
 package com.project.chatproject.controller.chat;
 
-import com.project.chatproject.Repository.ChatRepository;
+import com.project.chatproject.domain.dto.chat.ChatRoomDto;
 import com.project.chatproject.domain.entity.ChatRoom;
+import com.project.chatproject.service.chat.ChatService;
 import com.project.chatproject.service.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,13 +17,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class ChatRoomController {
 
-    private final ChatRepository chatRepository;
+    private final ChatService chatService;
 
     // 채팅 리스트 화면
     @GetMapping("/")
     public String goChatRoom(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        model.addAttribute("list", chatRepository.findAllRoom());
-        log.info("SHOW ALL ChatList {}", chatRepository.findAllRoom());
+        model.addAttribute("list", chatService.findAllRoom());
+        log.info("SHOW ALL ChatList {}", chatService.findAllRoom());
         log.info("roomName={}", model.getAttribute("roomName"));
 
         if(principalDetails != null){
@@ -41,7 +42,7 @@ public class ChatRoomController {
             @RequestParam(value = "maxUserCnt", defaultValue = "100")String maxUserCnt,
             RedirectAttributes rttr){
 
-        ChatRoom room = chatRepository.createChatRoom(name, pwd, Boolean.parseBoolean(secretChk), Integer.parseInt(maxUserCnt));
+        ChatRoomDto room = chatService.createChatRoom(name, pwd, Boolean.parseBoolean(secretChk), Integer.parseInt(maxUserCnt));
         log.info("CREATE Chat Room = {}", room);
         rttr.addFlashAttribute("roomName", room.getRoomName());
         return "redirect:/";
@@ -56,7 +57,7 @@ public class ChatRoomController {
         }
 
         log.info("roomId = {}", roomId);
-        model.addAttribute("room",chatRepository.findRoomById(roomId));
+        model.addAttribute("room",chatService.findRoomById(roomId));
         return "chatroom";
     }
 
@@ -67,7 +68,7 @@ public class ChatRoomController {
 
         // 넘어온 roomId 와 roomPwd 를 이용해서 비밀번호 찾기
         // 찾아서 입력받은 roomPwd 와 room pwd 와 비교해서 맞으면 true, 아니면  false
-        return chatRepository.confirmPwd(roomId, roomPwd);
+        return chatService.confirmPwd(roomId, roomPwd);
     }
 
     // 채팅방 삭제
@@ -75,7 +76,7 @@ public class ChatRoomController {
     public String delChatRoom(@PathVariable String roomId){
 
         // roomId 기준으로 chatRoomMap 에서 삭제, 해당 채팅룸 안에 있는 사진 삭제
-        chatRepository.delChatRoom(roomId);
+        chatService.delChatRoom(roomId);
 
         return "redirect:/";
     }
@@ -85,6 +86,13 @@ public class ChatRoomController {
     @ResponseBody
     public boolean chUserCnt(@PathVariable String roomId){
 
-        return chatRepository.chkRoomUserCnt(roomId);
+        return chatService.chkRoomUserCnt(roomId);
+    }
+
+    // 채팅방 수정
+    @PostMapping("/chat/changeChat")
+    @ResponseBody
+    public boolean chUserCnt(ChatRoomDto chatRoomDto){
+        return chatService.chatRoomChange(chatRoomDto);
     }
 }

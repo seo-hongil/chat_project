@@ -21,7 +21,7 @@ public class LoginController {
     @GetMapping("/chatlogin")
     public String goLogin(){
 
-        return "/chatlogin";
+        return "chatlogin";
     }
 
     @GetMapping("/signup")

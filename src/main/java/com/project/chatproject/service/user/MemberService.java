@@ -19,7 +19,12 @@ public class MemberService {
     public void signup(SignDto signDto){
         String encodedPwd = passwordEncoder.encode(signDto.getPwd());
 
-        Member newUser = Member.from(signDto, encodedPwd);
+        Member newUser = Member.builder()
+                .name(signDto.getName())
+                .email(signDto.getEmail())
+                .pwd(encodedPwd)
+                .build();
+        ;
 
         userRepository.save(newUser);
 

@@ -1,24 +1,39 @@
 package com.project.chatproject.domain.dto.chat;
 
-import com.project.chatproject.domain.entity.ChatRoom;
 import lombok.*;
 
-import java.util.UUID;
+import java.util.Map;
 
-// Stomp 를 통해 pub/sub를 사용하면 구독자 관리가 알아서 된다.
-// 따라서 따로 세션 관리를 하는 코드를 작성할 필도 없고,
-// 메시지를 다른 세션의 클라이언트에게 발송하는 것도 구현 필요가 없다.
 @Data
 @Builder
 public class ChatRoomDto {
     private String roomId; // 채팅방 아이디
     private String roomName; // 채팅방 이름
+    private String roomPwd; // 채팅방 비밀번호
+    private boolean secretChk; // 채팅방 잠금
     private int userCount; // 채팅방 인원수
+    private int maxUserCnt; // 채팅방 최대 인원 제한
+    private Long createDate;
+    private Map<String, String> userlist;
 
-    public static ChatRoom create(String roomName) {
-        return ChatRoom.builder()
-                .roomId(UUID.randomUUID().toString())
-                .roomName(roomName)
-                .build();
+
+    public ChatRoomDto plusUserCnt() {
+        this.userCount += 1;
+        return this;
+    }
+
+    public ChatRoomDto minusUserCnt() {
+        if (userCount > 0) {
+            this.userCount -= 1;
+        }
+        return this;
+    }
+
+    public ChatRoomDto changeRoom(ChatRoomDto chatRoomDto){
+        this.roomName = chatRoomDto.getRoomName();
+        this.roomPwd = chatRoomDto.getRoomPwd();
+        this.userCount = chatRoomDto.getUserCount();
+        this.secretChk = chatRoomDto.isSecretChk();
+        return this;
     }
 }
